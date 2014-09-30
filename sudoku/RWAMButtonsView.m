@@ -28,8 +28,8 @@
     if (self) {
         // We want all buttons to be the same size, so we determine these values first.
         CGFloat height = CGRectGetHeight(frame);
-        CGFloat verticalSeparationDistance = height*.04;
-        CGFloat buttonHeight = height*.44;
+        CGFloat verticalSeparationDistance = height*.06;
+        CGFloat buttonHeight = height*.88;
         
         CGFloat width = CGRectGetWidth(frame);
         CGFloat horizontalSeparationDistance = width*.04;
@@ -41,12 +41,13 @@
         int currentX = horizontalSeparationDistance, currentY = verticalSeparationDistance;
         NSInteger buttonIndex = 0;
         
-        NSString* titleNames = @"New Game, Save, Load, Themes, Music, Restart";
+//        NSString* titleNames = @"New Game, Save, Load, Themes, Music, Restart";
+        NSString* titleNames = @"New Game, Save, Load";
         _buttonTitles = [titleNames componentsSeparatedByString:@", "];
         
         
         
-        for (int row = 0; row < 2; ++row) {
+//        for (int row = 0; row < 2; ++row) {
             for (int col = 0; col < 3; ++col) {
                 CGRect buttonFrame = CGRectMake(currentX, currentY, buttonWidth, buttonHeight);
                 UIButton* button = [[UIButton alloc] initWithFrame:buttonFrame];
@@ -61,34 +62,11 @@
                     button.titleLabel.font = [UIFont systemFontOfSize:10];
                 }
                 ++buttonIndex;
-//                if (row == 0) {
-//                    if (col == 0) {
-//                        [button setTitle:@"New Game" forState:UIControlStateNormal];
-//                        button.titleLabel.font = [UIFont systemFontOfSize:10];
-//                    }
-//                    if (col == 1) {
-//                        [button setTitle:@"Save" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 2) {
-//                        [button setTitle:@"Load" forState:UIControlStateNormal];
-//                    }
-//                }
-//                if (row == 1) {
-//                    if (col == 0) {
-//                        [button setTitle:@"Themes" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 1) {
-//                        [button setTitle:@"Music" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 2) {
-//                        [button setTitle:@"Restart" forState:UIControlStateNormal];
-//                    }
-//                }
                 
             }
-            currentX = horizontalSeparationDistance;
-            currentY += verticalSeparationDistance + buttonHeight;
-        }
+//            currentX = horizontalSeparationDistance;
+//            currentY += verticalSeparationDistance + buttonHeight;
+//        }
         
     }
     return self;

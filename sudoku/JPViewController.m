@@ -54,7 +54,7 @@
     
     //Create Buttons view.
     CGFloat newGameButtonY = numPadY + spaceBetweenViews + size*.10;
-    CGRect buttonViewFrame = CGRectMake(x, newGameButtonY, size, size*.30);
+    CGRect buttonViewFrame = CGRectMake(x, newGameButtonY, size, size*.15);
     _buttonsView = [[RWAMButtonsView alloc] initWithFrame:buttonViewFrame];
     _buttonsView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:_buttonsView];
@@ -73,8 +73,10 @@
 {
     NSInteger selectedRow = [_gridView getCurrentRow];
     NSInteger selectedCol = [_gridView getCurrentColumn];
+    int row = selectedRow;
+    int col = selectedCol;
     
-    [self validateInputForRow:selectedRow andColumn:selectedCol];
+    [self validateInputForRow:row andColumn:col];
 }
 
 - (void) newGame:(id)sender;
@@ -83,10 +85,10 @@
     [self setInitialGrid];
 }
 
--(void)validateInputForRow: (NSInteger)row andColumn: (NSInteger)col
+-(void)validateInputForRow: (int)row andColumn: (int)col
 {
     if ([_gridModel isMutableAtRow:row andColumn:col]) {
-        NSInteger currentValue = [_numPadView getCurrentValue];
+        int currentValue = [_numPadView getCurrentValue];
         if (currentValue == 0) {
             [_gridView setCellatRow:row andColumn:col toValue:currentValue];
             [_gridModel setValueAtRow:row andColumn:col toValue:currentValue];
