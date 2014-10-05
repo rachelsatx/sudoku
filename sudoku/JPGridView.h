@@ -16,7 +16,10 @@
 
 - (void) setTarget:(id)sender action:(SEL)action;
 
-- (void) setCellatRow:(int)row andColumn:(int)column toValue:(int)value;
+- (void) setCellatRow:(int)row andColumn:(int)column toValue:(int)value andInitial:(BOOL)initial;
 
+- (void) changeTheme;
+
+- (void) setButtonBackgroundColor:(UIColor*)color;
 
 @end

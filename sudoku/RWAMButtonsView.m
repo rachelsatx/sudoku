@@ -10,8 +10,10 @@
 
 @interface RWAMButtonsView() {
     id _target;
+//    SEL _relevantSelector;
     
     NSArray* _buttonTitles;
+    NSMutableArray* _buttons;
     NSMutableArray* _buttonSelectors;
     
 }
@@ -32,8 +34,8 @@
         CGFloat buttonHeight = height*.44;
         
         CGFloat width = CGRectGetWidth(frame);
-        CGFloat horizontalSeparationDistance = width*.04;
-        CGFloat buttonWidth = width*.28;
+        CGFloat horizontalSeparationDistance = verticalSeparationDistance;
+        CGFloat buttonWidth = (width - 4*(horizontalSeparationDistance))/3;
         
         _buttonTitles = [[NSArray alloc] init];
         _buttonSelectors = [[NSMutableArray alloc] init];
@@ -45,8 +47,9 @@
         _buttonTitles = [titleNames componentsSeparatedByString:@", "];
         
         
-        
+        _buttons = [[NSMutableArray alloc] initWithCapacity:2];
         for (int row = 0; row < 2; ++row) {
+            NSMutableArray* currentRow = [[NSMutableArray alloc] initWithCapacity:3];
             for (int col = 0; col < 3; ++col) {
                 CGRect buttonFrame = CGRectMake(currentX, currentY, buttonWidth, buttonHeight);
                 UIButton* button = [[UIButton alloc] initWithFrame:buttonFrame];
@@ -60,32 +63,10 @@
                 if (buttonIndex == 0) {
                     button.titleLabel.font = [UIFont systemFontOfSize:10];
                 }
+                [currentRow addObject:button];
                 ++buttonIndex;
-//                if (row == 0) {
-//                    if (col == 0) {
-//                        [button setTitle:@"New Game" forState:UIControlStateNormal];
-//                        button.titleLabel.font = [UIFont systemFontOfSize:10];
-//                    }
-//                    if (col == 1) {
-//                        [button setTitle:@"Save" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 2) {
-//                        [button setTitle:@"Load" forState:UIControlStateNormal];
-//                    }
-//                }
-//                if (row == 1) {
-//                    if (col == 0) {
-//                        [button setTitle:@"Themes" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 1) {
-//                        [button setTitle:@"Music" forState:UIControlStateNormal];
-//                    }
-//                    if (col == 2) {
-//                        [button setTitle:@"Restart" forState:UIControlStateNormal];
-//                    }
-//                }
-                
             }
+            [_buttons addObject:currentRow];
             currentX = horizontalSeparationDistance;
             currentY += verticalSeparationDistance + buttonHeight;
         }
@@ -94,14 +75,16 @@
     return self;
 }
 
-- (void) buttonPressed:(id)sender;
+- (void) buttonPressed:(id)sender
 {
     UIButton* tempButton = (UIButton*) sender;
     SEL relevantSelector = [[_buttonSelectors objectAtIndex:tempButton.tag] pointerValue];
-    [_target performSelector:relevantSelector];
+//    IMP imp = [_target methodForSelector:_relevantSelector];
+//    imp(_target, _relevantSelector);
+     [_target performSelector:relevantSelector];
 }
 
-- (void) setTarget:(id)sender action:(SEL)action;
+- (void) setTarget:(id)sender action:(SEL)action
 {
     _target = sender;
     if ([NSStringFromSelector(action)  isEqual: @"newGame:"]) {
@@ -112,6 +95,25 @@
     }
     if ([NSStringFromSelector(action)  isEqual: @"loadSavedState:"]) {
         [_buttonSelectors insertObject:[NSValue valueWithPointer:action] atIndex:2];
+    }
+    if ([NSStringFromSelector(action)  isEqual: @"changeTheme:"]) {
+        [_buttonSelectors insertObject:[NSValue valueWithPointer:action] atIndex:3];
+    }
+    if ([NSStringFromSelector(action)  isEqual: @"toggleMusic:"]) {
+        [_buttonSelectors insertObject:[NSValue valueWithPointer:action] atIndex:4];
+    }
+    if ([NSStringFromSelector(action)  isEqual: @"restartGame:"]) {
+        [_buttonSelectors insertObject:[NSValue valueWithPointer:action] atIndex:5];
+    }
+}
+
+- (void) setButtonBackgroundColor:(UIColor*)color
+{
+    for (int row = 0; row < 2; ++row) {
+        for (int col = 0; col < 3; ++col) {
+            UIButton* button = _buttons[row][col];
+            button.backgroundColor = color;
+        }
     }
 }
 

@@ -32,30 +32,33 @@
 
 @implementation RWAMGridModel
 
-- (void) initializeFirstGame;
+- (void) initializeFirstGame
 {
     _gridGenerator = [[RWAMGridGenerator alloc] init];
     [_gridGenerator readGridsFile];
     [self startNewGame];
 }
 
-- (void) startNewGame;
+- (void) startNewGame
 {
     [self generateGrid];
     [self setUpMutable];
 }
 
-- (void) generateGrid;
+- (void) generateGrid
 {
-    int* gridArray = [_gridGenerator generateGrid];
+//    int* gridArray = [_gridGenerator generateGrid];
+    [_gridGenerator generateGrid];
+    int currentIndex = 0;
     for (int row = 0; row < 9; ++row) {
         for (int col = 0; col < 9; ++col) {
-            _grid[row][col] = gridArray[9*row + col];
+            _grid[row][col] = [_gridGenerator getGridValueAtIndex:currentIndex];
+            ++currentIndex;
         }
     }
 }
 
-- (void) setUpMutable;
+- (void) setUpMutable
 {
     for (int row = 0; row<9; ++row) {
         for (int col = 0; col<9; ++col) {
@@ -64,22 +67,22 @@
     }
 }
 
-- (int) getValueAtRow:(int)row andColumn:(int)col;
+- (int) getValueAtRow:(int)row andColumn:(int)col
 {
     return _grid[row][col];
 }
 
-- (void) setValueAtRow:(int)row andColumn:(int)col toValue:(int)value;
+- (void) setValueAtRow:(int)row andColumn:(int)col toValue:(int)value
 {
     _grid[row][col] = value;
 }
 
-- (bool) isMutableAtRow:(int)row andColumn:(int)col;
+- (bool) isMutableAtRow:(int)row andColumn:(int)col
 {
     return _mutable[row][col];
 }
 
-- (bool) isConsistentAtRow:(int)row andColumn:(int)col forValue:(int)value;
+- (bool) isConsistentAtRow:(int)row andColumn:(int)col forValue:(int)value
 {
     for (int c = 0; c < 9; ++c) {
         if (c != col && _grid[row][c] == value){
@@ -105,12 +108,17 @@
 
 /* _____ SAVE AND LOAD FUNCTIONS _____ */
 
-- (void) saveCurrentState;
+- (void) saveCurrentState
 {
     NSMutableString* saveString = [[NSMutableString alloc] init];
     for (int row = 0; row < 9; ++row) {
         for (int col = 0; col < 9; ++col) {
             [saveString appendString: [NSString stringWithFormat:@"%d", _grid[row][col]]];
+        }
+    }
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            [saveString appendString: [NSString stringWithFormat:@"%d", _mutable[row][col]]];
         }
     }
     NSError* error;
@@ -120,7 +128,7 @@
                  error:&error];
 }
 
-- (void) loadSavedState;
+- (void) loadSavedState
 {
     NSString* saveFile = [[NSBundle mainBundle] pathForResource:@"save" ofType:@"txt"];
     NSError* error;
@@ -136,6 +144,27 @@
         }
     }
     
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            char currentChar = [savedString characterAtIndex:currentIndex];
+            BOOL numToAdd = [[NSString stringWithFormat:@"%c", currentChar] boolValue];
+            _mutable[row][col] = numToAdd;
+            ++currentIndex;
+        }
+    }
+    //[self setUpMutable];
+    
+}
+
+/* _____ RESTART FUNCTION _____ */
+
+- (void) restartGame
+{
+    for (int row = 0; row < 9; ++row) {
+        for (int col = 0; col < 9; ++col) {
+            _grid[row][col] = (_grid[row][col] * !_mutable[row][col]);
+        }
+    }
 }
 
 @end
