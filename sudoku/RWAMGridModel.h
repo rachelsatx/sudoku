@@ -10,12 +10,14 @@
 
 @interface RWAMGridModel : NSObject
 
-//- (void) generateGrid; //TODO
 - (void) initializeFirstGame;
 - (void) startNewGame;
 - (int) getValueAtRow:(int)row andColumn:(int)col ;
 - (void) setValueAtRow:(int)row andColumn:(int)col toValue:(int)value;
 - (bool) isMutableAtRow:(int)row andColumn:(int)col;
 - (bool) isConsistentAtRow:(int)row andColumn:(int)col forValue:(int)value;
+- (void) saveCurrentState;
+- (void) loadSavedState;
+- (void) restartGame;
 
 @end

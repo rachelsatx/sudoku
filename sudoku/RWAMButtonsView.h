@@ -1,16 +1,16 @@
 //
-//  RWAMNumPadView.h
+//  RWAMButtonsView.h
 //  sudoku
 //
-//  Created by Rachel Wilson on 9/21/14.
+//  Created by Rachel Wilson on 9/27/14.
 //  Copyright (c) 2014 Josh Petrack. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface RWAMNumPadView : UIView
+@interface RWAMButtonsView : UIView
 
-- (int) getCurrentValue;
+- (void) setTarget:(id)sender action:(SEL)action;
 
 - (void) setButtonBackgroundColor:(UIColor*)color;
 
